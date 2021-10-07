@@ -38,6 +38,12 @@ namespace Thread_.NET.WebAPI.Controllers
             return Ok(await _postService.CreatePost(dto));
         }
 
+        [HttpDelete("id")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            return NoContent();
+        }
+
         [HttpPost("like")]
         public async Task<IActionResult> LikePost(NewReactionDTO reaction)
         {
