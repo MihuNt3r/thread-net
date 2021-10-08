@@ -38,11 +38,11 @@ namespace Thread_.NET.WebAPI.Controllers
             return Ok(await _postService.CreatePost(dto));
         }
 
-        [HttpDelete("id")]
-        public async Task<IActionResult> DeletePost(int id)
-        {
-            return NoContent();
-        }
+        //[HttpDelete("id")]
+        //public async Task<IActionResult> DeletePost(int id)
+        //{
+        //    return NoContent();
+        //}
 
         [HttpPost("like")]
         public async Task<IActionResult> LikePost(NewReactionDTO reaction)
@@ -50,6 +50,15 @@ namespace Thread_.NET.WebAPI.Controllers
             reaction.UserId = this.GetUserIdFromToken();
 
             await _likeService.LikePost(reaction);
+            return Ok();
+        }
+
+        [HttpPost("dislike")]
+        public async Task<IActionResult> DislikePost(NewReactionDTO reaction)
+        {
+            reaction.UserId = this.GetUserIdFromToken();
+
+            await _likeService.DislikePost(reaction);
             return Ok();
         }
     }

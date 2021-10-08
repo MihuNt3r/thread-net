@@ -13,7 +13,7 @@
       <mat-icon matBadge="{{post.reactions.length}}" matBadgeColor="accent" matBadgeSize="medium"
         [matBadgeHidden]="post.reactions.length === 0" aria-label="Like">thumb_up</mat-icon>
     </button>
-    <button mat-icon-button color="warn">
+    <button mat-icon-button color="warn" (click)="dislikePost()">
       <mat-icon>thumb_down</mat-icon>
     </button>
     <button mat-icon-button color="accent">

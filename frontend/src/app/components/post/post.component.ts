@@ -32,7 +32,7 @@ export class PostComponent implements OnDestroy {
         private likeService: LikeService,
         private commentService: CommentService,
         private snackBarService: SnackBarService
-    ) {}
+    ) { }
 
     public ngOnDestroy() {
         this.unsubscribe$.next();
@@ -69,6 +69,24 @@ export class PostComponent implements OnDestroy {
 
         this.likeService
             .likePost(this.post, this.currentUser)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((post) => (this.post = post));
+    }
+
+    public dislikePost() {
+        if (!this.currentUser) {
+            this.catchErrorWrapper(this.authService.getUser())
+                .pipe(
+                    switchMap((userResp) => this.likeService.dislikePost(this.post, userResp)),
+                    takeUntil(this.unsubscribe$)
+                )
+                .subscribe((post) => (this.post = post));
+
+            return;
+        }
+
+        this.likeService
+            .dislikePost(this.post, this.currentUser)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((post) => (this.post = post));
     }
