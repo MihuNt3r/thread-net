@@ -55,6 +55,14 @@ export class PostComponent implements OnDestroy {
         this.showComments = !this.showComments;
     }
 
+    public likeCount() {
+        return this.post.reactions.filter(r => r.isLike === true).length;
+    }
+
+    public dislikeCount() {
+        return this.post.reactions.filter(r => r.isLike === false).length;
+    }
+
     public likePost() {
         if (!this.currentUser) {
             this.catchErrorWrapper(this.authService.getUser())
