@@ -163,6 +163,27 @@ export class MainThreadComponent implements OnInit, OnDestroy {
         }
     }
 
+    public deletePost(post: Post) {
+        if (!this.currentUser) {
+            this.openAuthDialog();
+        }
+
+        if (this.currentUser.id != post.author.id) {
+            return;
+        }
+
+        this.postService.deletePost(post.id)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (resp) => {
+                    if (resp) {
+                        this.posts = this.sortPostArray(this.posts.filter(p => p != post))
+                    }
+                },
+                (error) => this.snackBarService.showErrorMessage(error)
+            );
+    }
+
     private getUser() {
         this.authService
             .getUser()

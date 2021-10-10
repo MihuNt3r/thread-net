@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Thread_.NET.BLL.Exceptions;
 using Thread_.NET.BLL.Services;
 using Thread_.NET.Common.DTO.Like;
 using Thread_.NET.Common.DTO.Post;
@@ -38,12 +39,50 @@ namespace Thread_.NET.WebAPI.Controllers
             return Ok(await _postService.CreatePost(dto));
         }
 
+        [HttpPut]
+        public async Task<ActionResult<PostDTO>> UpdatePost([FromBody] PostDTO dto)
+        {
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            try
+            {
+                int userId = this.GetUserIdFromToken();
+                var post = await _postService.GetPostById(id);
+
+                if (post.Author.Id != userId)
+                {
+                    return Unauthorized();
+                }
+
+                await _postService.DeletePostById(id);
+
+                return NoContent();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
         [HttpPost("like")]
         public async Task<IActionResult> LikePost(NewReactionDTO reaction)
         {
             reaction.UserId = this.GetUserIdFromToken();
 
             await _likeService.LikePost(reaction);
+            return Ok();
+        }
+
+        [HttpPost("dislike")]
+        public async Task<IActionResult> DislikePost(NewReactionDTO reaction)
+        {
+            reaction.UserId = this.GetUserIdFromToken();
+
+            await _likeService.DislikePost(reaction);
             return Ok();
         }
     }

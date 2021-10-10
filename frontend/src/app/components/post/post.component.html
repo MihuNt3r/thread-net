@@ -10,15 +10,25 @@
   </mat-card-content>
   <mat-card-actions class="actions-buttons" align="end">
     <button mat-icon-button color="primary" (click)="likePost()">
-      <mat-icon matBadge="{{post.reactions.length}}" matBadgeColor="accent" matBadgeSize="medium"
-        [matBadgeHidden]="post.reactions.length === 0" aria-label="Like">favorite</mat-icon>
+      <mat-icon matBadge="{{likeCount()}}" matBadgeColor="accent" matBadgeSize="medium"
+        [matBadgeHidden]="likeCount() === 0" aria-label="Like">thumb_up</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" (click)="dislikePost()">
+      <mat-icon matBadge="{{dislikeCount()}}" matBadgeColor="warn" matBadgeSize="medium"
+        [matBadgeHidden]="dislikeCount() === 0" aria-label="Dislike">thumb_down</mat-icon>
     </button>
     <button mat-icon-button color="accent">
       <mat-icon aria-label="Share">share</mat-icon>
     </button>
-    <button mat-icon-button color="basic" (click)=" toggleComments()">
+    <button mat-icon-button color="basic" (click)="toggleComments()">
       <mat-icon matBadge="{{post.comments.length}}" matBadgeColor="warn" matBadgeSize="medium"
         [matBadgeHidden]="post.comments.length === 0" aria-label="Add comment">comment</mat-icon>
+    </button>
+    <button *ngIf="isDeleteButtonVisible()" mat-icon-button color="primary">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button *ngIf="isDeleteButtonVisible()" mat-icon-button color="warn" (click)="deletePost()">
+      <mat-icon>delete</mat-icon>
     </button>
   </mat-card-actions>
   <div *ngIf="showComments">
