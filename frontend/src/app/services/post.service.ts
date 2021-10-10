@@ -25,4 +25,8 @@ export class PostService {
     public dislikePost(reaction: NewReaction) {
         return this.httpService.postFullRequest<Post>(`${this.routePrefix}/dislike`, reaction);
     }
+
+    public deletePost(id: number) {
+        return this.httpService.deleteFullRequest<Post>(`${this.routePrefix}/${id}`);
+    }
 }

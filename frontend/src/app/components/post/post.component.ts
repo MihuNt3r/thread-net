@@ -11,6 +11,8 @@ import { User } from '../../models/user';
 import { Comment } from '../../models/comment/comment';
 import { catchError, switchMap, takeUntil } from 'rxjs/operators';
 import { SnackBarService } from '../../services/snack-bar.service';
+import { PostService } from '../../services/post.service';
+import { MainThreadComponent } from '../main-thread/main-thread.component';
 
 @Component({
     selector: 'app-post',
@@ -21,6 +23,7 @@ export class PostComponent implements OnDestroy {
     @Input() public post: Post;
     @Input() public currentUser: User;
 
+    public showDeleteButton = false;
     public showComments = false;
     public newComment = {} as NewComment;
 
@@ -31,7 +34,8 @@ export class PostComponent implements OnDestroy {
         private authDialogService: AuthDialogService,
         private likeService: LikeService,
         private commentService: CommentService,
-        private snackBarService: SnackBarService
+        private snackBarService: SnackBarService,
+        private mainThread: MainThreadComponent
     ) { }
 
     public ngOnDestroy() {
@@ -55,11 +59,11 @@ export class PostComponent implements OnDestroy {
         this.showComments = !this.showComments;
     }
 
-    public likeCount() {
+    public likeCount(): number {
         return this.post.reactions.filter(r => r.isLike === true).length;
     }
 
-    public dislikeCount() {
+    public dislikeCount(): number {
         return this.post.reactions.filter(r => r.isLike === false).length;
     }
 
@@ -119,6 +123,13 @@ export class PostComponent implements OnDestroy {
 
     public openAuthDialog() {
         this.authDialogService.openAuthDialog(DialogType.SignIn);
+    }
+
+    public isDeleteButtonVisible(): boolean {
+        return this.post.author.id == this.currentUser.id;
+    }
+    public deletePost() {
+        this.mainThread.deletePost(this.post);
     }
 
     private catchErrorWrapper(obs: Observable<User>) {
