@@ -125,7 +125,11 @@ export class PostComponent implements OnDestroy {
         this.authDialogService.openAuthDialog(DialogType.SignIn);
     }
 
-    public isDeleteButtonVisible(): boolean {
+    public isDeleteButtonVisible(): Boolean {
+        if (!this.currentUser) {
+            return false;
+        }
+
         return this.post.author.id == this.currentUser.id;
     }
     public deletePost() {
