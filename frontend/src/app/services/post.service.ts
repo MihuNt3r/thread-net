@@ -8,7 +8,7 @@ import { NewPost } from '../models/post/new-post';
 export class PostService {
     public routePrefix = '/api/posts';
 
-    constructor(private httpService: HttpInternalService) {}
+    constructor(private httpService: HttpInternalService) { }
 
     public getPosts() {
         return this.httpService.getFullRequest<Post[]>(`${this.routePrefix}`);
@@ -20,5 +20,13 @@ export class PostService {
 
     public likePost(reaction: NewReaction) {
         return this.httpService.postFullRequest<Post>(`${this.routePrefix}/like`, reaction);
+    }
+
+    public dislikePost(reaction: NewReaction) {
+        return this.httpService.postFullRequest<Post>(`${this.routePrefix}/dislike`, reaction);
+    }
+
+    public deletePost(id: number) {
+        return this.httpService.deleteFullRequest<Post>(`${this.routePrefix}/${id}`);
     }
 }
